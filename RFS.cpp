@@ -775,7 +775,7 @@ STDMETHODIMP CRARFileSource::Load (LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE 
 
 	if (!num_ok_files)
 	{
-		ErrorMsg (0, L"No media files found in the archive.");
+		ErrorMsg (0, L"No usable media files found in the archive. (Total files: %d)", num_files);
 		return E_UNEXPECTED; // TODO: Figure out a better error code.
 	}
 
