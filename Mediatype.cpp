@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
+/*
    most of the information used in this file comes from
    http://msdn.microsoft.com/en-us/library/ms787558(VS.85).aspx
  */
@@ -31,7 +31,7 @@
 #include "File.h"
 
 
-/* getNextToken extracts the current token from the string and 
+/* getNextToken extracts the current token from the string and
    and sets the starting point of the next token */
 static void getNextToken (wchar_t **strTok, wchar_t **nextTokenStart)
 {

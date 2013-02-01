@@ -272,7 +272,7 @@ STDMETHODIMP CRFSOutputPin::Request (IMediaSample* pSample, DWORD_PTR dwUser)
 	{
 		DbgLog((LOG_TRACE, 2, L"SyncReadAligned bad alignment. align = %lu, pos = %lld, len = %lu, buf = %p",
 			m_align, llPosition, lLength, pBuffer));
-        return VFW_E_BADALIGN;
+		return VFW_E_BADALIGN;
 	}
 
 	LARGE_INTEGER offset;
@@ -530,7 +530,7 @@ STDMETHODIMP CRFSOutputPin::SyncReadAligned (IMediaSample* pSample)
 	{
 		DbgLog((LOG_TRACE, 2, L"SyncReadAligned bad alignment. align = %lu, pos = %lld, len = %lu, buf = %p",
 			m_align, llPosition, lLength, pBuffer));
-        return VFW_E_BADALIGN;
+		return VFW_E_BADALIGN;
 	}
 
 	LONG cbActual = 0;

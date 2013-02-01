@@ -80,11 +80,11 @@ typedef struct
 	DWORD   attributes;
 	DWORD   name_len;
 
-	char    *filename;
+	char	*filename;
 
-	BYTE    os;
-	BYTE    version;
-	BYTE    method;
+	BYTE	os;
+	BYTE	version;
+	BYTE	method;
 
 } file_header_t;
 

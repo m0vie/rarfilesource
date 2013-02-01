@@ -198,7 +198,7 @@ CRARFileSource::CRARFileSource (LPUNKNOWN punk, HRESULT *phr) :
 {
 	if (phr)
 		*phr = S_OK;
-} 
+}
 
 CRARFileSource::~CRARFileSource ()
 {
