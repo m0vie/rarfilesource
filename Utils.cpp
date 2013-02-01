@@ -30,7 +30,7 @@ void ErrorMsg (DWORD errorCode, wchar_t *format, ...)
 //	__asm int 3;
 
 	va_start (argptr, format);
-	StringCchVPrintfEx (buffer, 1024, &end, &remaining, 0, format, argptr);
+	StringCchVPrintfEx (buffer, _countof(buffer), &end, &remaining, 0, format, argptr);
 	va_end (argptr);
 
 	if (errorCode && remaining > 9)
