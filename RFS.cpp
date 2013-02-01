@@ -505,12 +505,14 @@ int CRARFileSource::ScanArchive (wchar_t *archive_name, List<File> *file_list, i
 
 				if (rh.ch.flags & LHD_PASSWORD)
 				{
+					ErrorMsg (0, L"Encrypted file is not supported: \"%S\"", rh.fh.filename);
 					DbgLog((LOG_TRACE, 2, L"Encrypted files are not supported."));
 					file->unsupported = true;
 				}
 
 				if (rh.fh.method != 0x30)
 				{
+					ErrorMsg (0, L"Compressed file is not supported: \"%S\"", rh.fh.filename);
 					DbgLog((LOG_TRACE, 2, L"Compressed files are not supported."));
 					file->unsupported = true;
 				}
