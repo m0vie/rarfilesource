@@ -19,6 +19,7 @@
 !include x64.nsh
 
 !define VERSION "0.9.3"
+!define VERSION2 "0.9.3.0"
 
 Name "RAR File Source"
 OutFile "RARFileSource-v${VERSION}.exe"
@@ -28,6 +29,7 @@ OutFile "RARFileSource-v${VERSION}.exe"
 InstallDirRegKey HKLM ${REGKEY} "InstallLocation"
 
 RequestExecutionLevel admin
+SetCompressor /SOLID lzma
 
 !insertmacro MUI_PAGE_WELCOME
 
@@ -47,45 +49,44 @@ RequestExecutionLevel admin
 
 !define LIBRARY_IGNORE_VERSION
 
-!macro checkRedist TARGET
-	SetRegView 32
-checkInstalled:
-	ReadRegDWORD $0 HKLM "Software\Microsoft\VisualStudio\10.0\VC\VCRedist\${TARGET}" "Installed"
-	IntCmp $0 1 redistInstalled
-	ReadRegDWORD $0 HKLM "Software\Microsoft\VisualStudio\10.0\VC\Runtimes\${TARGET}" "Installed"
-	IntCmp $0 1 redistInstalled
-	MessageBox MB_ABORTRETRYIGNORE "The Microsoft Visual C++ 2010 Redistributable Package (${TARGET}) is not installed.$\nWithout the necessary runtime DLLs the filter will not work.$\n$\nFind it at http://www.microsoft.com/downloads/ and try again." IDIGNORE redistInstalled IDRETRY checkInstalled
-	Quit
-redistInstalled:
-!macroend
+
+VIProductVersion "${VERSION2}"
+VIAddVersionKey "CompanyName"     "OctaneSnail"
+VIAddVersionKey "ProductName"     "RARFileSource"
+VIAddVersionKey "ProductVersion"  "${VERSION2}"
+VIAddVersionKey "FileDescription" "RARFileSource ${VERSION} installer"
+VIAddVersionKey "FileVersion"     "${VERSION2}"
+VIAddVersionKey "LegalCopyright"  "OctaneSnail"
+BrandingText " "
+
 
 Section "Install 32-bit filter" SEC_X86
-	!insertmacro checkRedist x86
 	SetOutPath "$INSTDIR"
-	!insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "Release\RARFileSource.ax" "$INSTDIR\RARFileSource.ax" "$INSTDIR"
+	!insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "Win32\Release\RARFileSource.ax" "$INSTDIR\RARFileSource.ax" "$INSTDIR"
 SectionEnd
 
 Section "Install 64-bit filter" SEC_X64
-	!insertmacro checkRedist x64
 	SetOutPath "$INSTDIR\x64"
 	!define LIBRARY_X64
 	!insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "x64\Release\RARFileSource.ax" "$INSTDIR\x64\RARFileSource.ax" "$INSTDIR\x64"
 SectionEnd
 
+
 Section "-Uninstaller"
 	SetRegView 32
 	SetOutPath "$INSTDIR"
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
-	WriteRegStr HKLM ${REGKEY} "DisplayName" "RAR File Source"
-	WriteRegStr HKLM ${REGKEY} "DisplayVersion" "${VERSION}"
-	WriteRegStr HKLM ${REGKEY} "HelpLink" "http://www.v12pwr.com/RARFileSource/"
-	WriteRegStr HKLM ${REGKEY} "InstallLocation" "$INSTDIR"
-	WriteRegStr HKLM ${REGKEY} "Publisher" "OctaneSnail"
-	WriteRegStr HKLM ${REGKEY} "UninstallString" "$INSTDIR\Uninstall.exe"
-	WriteRegStr HKLM ${REGKEY} "URLInfoAbout" "http://www.v12pwr.com/RARFileSource/"
+	WriteRegStr HKLM ${REGKEY}   "DisplayName"     "RAR File Source ${VERSION}"
+	WriteRegStr HKLM ${REGKEY}   "DisplayVersion"  "${VERSION2}"
+	WriteRegStr HKLM ${REGKEY}   "HelpLink"        "http://www.v12pwr.com/RARFileSource/"
+	WriteRegStr HKLM ${REGKEY}   "InstallLocation" "$INSTDIR"
+	WriteRegStr HKLM ${REGKEY}   "Publisher"       "OctaneSnail"
+	WriteRegStr HKLM ${REGKEY}   "UninstallString" "$INSTDIR\Uninstall.exe"
+	WriteRegStr HKLM ${REGKEY}   "URLInfoAbout"    "http://www.v12pwr.com/RARFileSource/"
 	WriteRegDWORD HKLM ${REGKEY} "NoModify" 1
 	WriteRegDWORD HKLM ${REGKEY} "NoRepair" 1
 SectionEnd
+
 
 Function ComponentsPre
 	${IfNot} ${RunningX64}
@@ -94,6 +95,7 @@ Function ComponentsPre
 		Abort
 	${EndIf}
 FunctionEnd
+
 
 Function ComponentsLeave
 	!insertmacro SectionFlagIsSet ${SEC_X86} ${SF_SELECTED} ok_x86 check_x64
@@ -115,6 +117,7 @@ abort:
 
 end:
 FunctionEnd
+
 
 Section "Uninstall"
 	!undef LIBRARY_X64
